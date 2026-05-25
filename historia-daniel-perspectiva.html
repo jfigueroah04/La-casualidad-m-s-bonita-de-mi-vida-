@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi historia con Alejandra — Daniel</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf7f2;
+  --surface: #f2ece0;
+  --ink: #1e1a15;
+  --mid: #5c5145;
+  --faint: #a89880;
+  --accent: #c04a2f;
+  --gold: #b8924a;
+  --border: #e0d5c5;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 300;
+  line-height: 1.75;
+  overflow-x: hidden;
+}
+
+/* PROGRESS */
+#prog {
+  position: fixed; top: 0; left: 0;
+  height: 3px; background: var(--accent);
+  width: 0; z-index: 200;
+  transition: width 0.08s linear;
+}
+
+/* PORTADA */
+.cover {
+  min-height: 100vh;
+  background: var(--ink);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 5rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 30% 50%, #2e1f12 0%, transparent 70%),
+    radial-gradient(ellipse 60% 80% at 75% 60%, #1a1008 0%, transparent 70%);
+}
+
+.cover-lines {
+  position: absolute; inset: 0; opacity: 0.07;
+  background-image: repeating-linear-gradient(
+    0deg, transparent, transparent 39px, #c8b89a 39px, #c8b89a 40px
+  );
+}
+
+.cover-tag {
+  position: relative;
+  font-size: 10px; letter-spacing: 0.5em;
+  text-transform: uppercase; color: var(--gold);
+  opacity: 0.8; margin-bottom: 2.5rem;
+}
+
+.cover-name {
+  position: relative;
+  font-family: 'Lora', serif;
+  font-size: clamp(4rem, 14vw, 9rem);
+  font-weight: 400; font-style: italic;
+  color: #f5ede0;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+}
+
+.cover-name span {
+  display: block;
+  font-size: clamp(1.2rem, 4vw, 2rem);
+  font-style: normal;
+  font-weight: 300;
+  color: var(--faint);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.cover-desc {
+  position: relative;
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: clamp(0.95rem, 2.2vw, 1.2rem);
+  color: #8c7d6a;
+  max-width: 440px;
+  line-height: 1.7;
+  margin-bottom: 4rem;
+}
+
+.cover-arrow {
+  position: relative;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 10px;
+  color: #5c5145; font-size: 10px;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+.cover-arrow::after {
+  content: '';
+  width: 1px; height: 50px;
+  background: linear-gradient(to bottom, #5c5145, transparent);
+}
+
+@keyframes bounce {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+/* NAV LATERAL */
+.sidenav {
+  position: fixed; right: 1.5rem; top: 50%;
+  transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 8px;
+  z-index: 100;
+}
+
+.sidenav a {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+  display: block;
+  transition: background 0.2s, transform 0.2s;
+  cursor: pointer;
+}
+
+.sidenav a.active, .sidenav a:hover {
+  background: var(--accent);
+  transform: scale(1.4);
+}
+
+/* SECCIONES */
+.chapter {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 7rem 2rem;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.75s ease, transform 0.75s ease;
+}
+
+.chapter.in { opacity: 1; transform: translateY(0); }
+
+.ch-meta {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 1.25rem;
+}
+
+.ch-num {
+  font-size: 10px; letter-spacing: 0.45em;
+  text-transform: uppercase; color: var(--gold);
+}
+
+.ch-line {
+  flex: 1; height: 1px; background: var(--border);
+}
+
+.ch-title {
+  font-family: 'Lora', serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 400; line-height: 1.1;
+  color: var(--ink); margin-bottom: 2.5rem;
+}
+
+.ch-title em { font-style: italic; color: var(--accent); }
+
+.chapter p {
+  font-size: 1.05rem;
+  color: #3d3226;
+  margin-bottom: 1.5rem;
+  line-height: 1.9;
+}
+
+.chapter p:last-of-type { margin-bottom: 0; }
+
+/* QUOTE */
+.quote {
+  margin: 2.5rem 0;
+  padding: 1.75rem 2rem;
+  background: var(--surface);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 4px 4px 0;
+}
+
+.quote p {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem) !important;
+  color: var(--accent) !important;
+  margin: 0 !important;
+  line-height: 1.6 !important;
+}
+
+/* SEPARADOR */
+.sep {
+  text-align: center;
+  padding: 1rem 0;
+  color: var(--border);
+  font-family: 'Lora', serif;
+  font-size: 1.8rem;
+  letter-spacing: 0.6em;
+}
+
+/* CIERRE */
+.ending {
+  background: var(--ink);
+  padding: 10rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.ending-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 70% at 50% 50%, #291a0d 0%, #100c08 100%);
+}
+
+.ending .chapter {
+  opacity: 1; transform: none;
+  padding: 0;
+}
+
+.ending-glyph {
+  font-family: 'Lora', serif;
+  font-size: 2.5rem;
+  color: var(--gold);
+  opacity: 0.5;
+  margin-bottom: 2rem;
+}
+
+.ending-quote {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  color: #f0e5d3;
+  line-height: 1.7;
+  margin-bottom: 3rem;
+}
+
+.ending-sig {
+  font-size: 11px; letter-spacing: 0.4em;
+  text-transform: uppercase; color: #5c5145;
+}
+
+@media (max-width: 600px) {
+  .sidenav { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<nav class="sidenav" id="sidenav">
+  <a href="#s0" title="Portada"></a>
+  <a href="#s1" title="El comienzo"></a>
+  <a href="#s2" title="El reencuentro"></a>
+  <a href="#s3" title="Tu cumpleaños"></a>
+  <a href="#s4" title="El Wii y Laika"></a>
+  <a href="#s5" title="Mi cumpleaños"></a>
+  <a href="#s6" title="Las mixtas"></a>
+  <a href="#s7" title="Heartopia"></a>
+  <a href="#s8" title="Los perritos"></a>
+  <a href="#s9" title="Mario Bros"></a>
+  <a href="#s10" title="El futuro"></a>
+  <a href="#s11" title="La feria"></a>
+</nav>
+
+<!-- PORTADA -->
+<section class="cover" id="s0">
+  <div class="cover-bg"></div>
+  <div class="cover-lines"></div>
+  <p class="cover-tag">Escrito por Daniel · Para Alejandra</p>
+  <h1 class="cover-name">
+    <span>Mi historia con</span>
+    Alejandra
+  </h1>
+  <p class="cover-desc">"Una historia construida entre videojuegos, nervios, perritos y momentos que terminaron significando demasiado."</p>
+  <div class="cover-arrow">Leer</div>
+</section>
+
+<!-- CAP 1 -->
+<article class="chapter" id="s1">
+  <div class="ch-meta">
+    <span class="ch-num">Capítulo uno</span>
+    <span class="ch-line"></span>
+  </div>
+  <h2 class="ch-title"><em>El comienzo</em></h2>
+  <p>Comenzó con mensajes por Facebook. Así de simple, así de sin aviso.</p>
+  <p>Al principio no le daba importancia. Eran conversaciones ordinarias, de esas que uno tiene sin esperar que lleven a ningún lado. Pero algo en ellas me hacía querer seguir respondiendo, seguir preguntando, seguir ahí.</p>
+  <p>Después vino una videollamada. Una de esas llamadas raras que no tienen un inicio claro ni un final definido. Me quedé dormido sin darme cuenta, y cuando desperté no supe exactamente qué había pasado. Solo sé que amanecí con una felicidad que no tenía explicación lógica.</p>
+  <div class="quote"><p>"No sabía entonces que eso era el principio. Que ese despertar feliz y sin razón aparente era, en realidad, la primera página de algo."</p></div>
+</article>
+
+<div class="sep">— ✦ —</div>
+
+<!-- CAP 2 -->
+<article class="chapter" id="s2">
+  <div class="ch-meta">
+    <span class="ch-num">Capítulo dos</span>
+    <span class="ch-line"></span>
+  </div>
+  <h2 class="ch-title">El <em>reencuentro</em></h2>
+  <p>Dejamos de hablar. No sé bien cómo ni exactamente cuándo, pero hubo un silencio entre nosotros que duró lo suficiente para que yo sintiera que quizás eso había sido todo.</p>
+  <p>Pero no fue todo.</p>
+  <p>Un día le escribí. Empezamos de nuevo con preguntas, con risas, y terminamos organizando una partida juntos en un videojuego. Y ahí estaba otra vez, esa sensación de que el tiempo se me pasaba sin que me importara lo más mínimo.</p>
+  <p>Cada partida me daba una excusa para quedarme más tiempo conectado con ella. Cada mensaje era uno más que quería mandar. Me di cuenta de que disfrutaba demasiado su presencia, aunque fuera a través de una pantalla, aunque todavía no entendiera bien qué significaba eso para mí.</p>
+</article>
+
+<div class="sep">— ✦ —</div>
+
+<!-- CAP 3 -->
+<article class="chapter" id="s3">
+  <div class="ch-meta">
+    <span class="ch-num">Capítulo tres</span>
+    <span class="ch-line"></span>
+  </div>
+  <h2 class="ch-title">Tu <em>cumpleaños</em></h2>
+  <p>La primera vez que nos vimos en persona fue en tu cumpleaños. Y yo estaba, seré honesto, absolutamente nervioso.</p>
+  <p>No podía dejar de pensar en qué ibas a pensar al verme. Si la persona que conociste detrás de una pantalla iba a decepcionarte en la realidad. Si íbamos a poder hablar igual, reírnos igual, conectar igual sin el filtro cómodo de una conversación escrita.</p>
+  <p>Y entonces bajaste de un carro negro.</p>
+  <p>Los nervios no se fueron. Pero apareció algo más junto a ellos: una sonrisa que no pude controlar en todo el día. Estuve a tu lado sin poder dejar de reír, sin querer que las horas avanzaran, deseando que ese día no terminara.</p>
+  <div class="quote"><p>"Antes de irte me diste un beso en la mejilla. Algo tan pequeño. Algo que no he podido olvidar."</p></div>
+</article>
+
+<div class="sep">— ✦ —</div>
+
+<!-- CAP 4 -->
+<article class="chapter" id="s4">
+  <div class="ch-meta">
+    <span class="ch-num">Capítulo cuatro</span>
+    <span class="ch-line"></span>
+  </div>
+  <h2 class="ch-title">El Wii, <em>Laika</em><br>y el primer beso</h2>
+  <p>Después de ese día me preguntaste si querías venir a mi casa. Y viniste.</p>
+  <p>Pusimos el Wii y en algún punto de la tarde me dijiste, con toda la calma del mundo, que me darías un beso si lograba pasar un nivel. Un nivel que yo había completado como diez veces antes. Un nivel que, con los nervios que tenía encima, de pronto parecía imposible. Mis manos no respondían. Mi cerebro tampoco. Fue ridículo y perfecto al mismo tiempo.</p>
+  <p>Más tarde fuimos a ver a Laika. Sé lo mucho que te gusta esa perrita, y verla contigo fue algo lindo. Y en algún momento entre las risas, la perrita y un instante que ninguno de los dos planeó, nos dimos nuestro primer beso.</p>
+  <p>No recuerdo exactamente cómo pasó. Solo recuerdo que pasó, y que después de eso todo se sentía diferente.</p>
+</article>
+
+<div class="sep">— ✦ —</div>
+
+<!-- CAP 5 -->
+<article class="chapter" id="s5">
+  <div class="ch-meta">
+    <span class="ch-num">Capítulo cinco</span>
+    <span class="ch-line"></span>
+  </div>
+  <h2 class="ch-title">Mi <em>cumpleaños</em></h2>
+  <p>En mi cumpleaños sabía que tenías cosas que hacer. Lo entendía. Pero entenderlo no me quitó la sensación de ir pasando de la ilusión a algo más gris conforme avanzaba el día.</p>
+  <p>Y entonces apareciste.</p>
+  <p>Llegaste con un suéter enorme que todavía recuerdo con una ternura que no sé cómo explicar. Parecías un Snoopy abrigado y fue lo más lindo que pude imaginar. Te presentaste con mi familia como si nada, con esa naturalidad tuya que siempre me desarma.</p>
+  <p>Y me regalaste un peluche de un personaje que me encanta. No esperaba eso. No esperaba ninguna de eso, en realidad.</p>
+  <p>Ese día quise hacerte algo especial también. Convencí a mi hermana de ir a buscar peluches contigo de pretexto, y cuando vi un pequeño pingüino celeste supe que era el tuyo. Los planes para dártelo se complicaron más de lo que esperaba, y terminé dándotelo mucho después de cuando quería. Pero el significado era el mismo. Siempre fue el mismo.</p>
+</article>
+
+<div class="sep">— ✦ —</div>
+
+<!-- CAP 6 -->
+<article class="chapter" id="s6">
+  <div class="ch-meta">
+    <span class="ch-num">Capítulo seis</span>
+    <span class="ch-line"></span>
+  </div>
+  <h2 class="ch-title">Las mixtas y<br>los días <em>simples</em></h2>
+  <p>Hubo épocas en que hablamos menos. Sin razones enormes, solo la vida entrando por en medio. Pero siempre terminábamos volviendo a coincidir, como si algo entre nosotros no supiera quedarse quieto demasiado tiempo.</p>
+  <p>Cuando organizamos que vinieras a recibir tus clases conmigo, supe que te gustaban las mixtas. Así que coordiné con mi mamá qué había que comprar para prepararlas. No fue nada del otro mundo. Fui al mercado, conseguí las cosas, y punto. Pero lo hice pensando en ti, y eso lo hacía diferente.</p>
+  <p>También me gustaban los viajes en moto a la universidad. Solo el camino de siempre, nada especial desde afuera. Pero yo ahí, a tu lado, descubrí algo que no había pensado antes: que los momentos más ordinarios pueden sentirse extraordinarios dependiendo de con quién los vives.</p>
+  <div class="quote"><p>"Contigo hasta lo más básico me gustaba. No necesitaba que fuera algo grande. Solo necesitaba que fuera contigo."</p></div>
+</article>
+
+<div class="sep">— ✦ —</div>
+
+<!-- CAP 7 -->
+<article class="chapter" id="s7">
+  <div class="ch-meta">
+    <span class="ch-num">Capítulo siete</span>
+    <span class="ch-line"></span>
+  </div>
+  <h2 class="ch-title"><em>Heartopia</em><br>y el libro</h2>
+  <p>Después de otra etapa de distancia, volvimos a acercarnos. Esta vez con Heartopia y con <em>El hogar de Miss Peregrine</em>.</p>
+  <p>Me encantaba escucharte leer. Lo hacías con todo el sentimiento puesto, como si cada página te importara de verdad, y yo me quedaba ahí callado solo para seguir escuchándote. En el juego me esforzaba por conseguir ropa nueva, accesorios, cualquier cosa, solo para ver tu reacción. Solo para escuchar que te gustaba. Era ridículo y al mismo tiempo lo más importante del mundo.</p>
+  <p>Fui sintiendo más cariño de tu parte. Y con ese cariño vino algo que yo había querido desde hacía tiempo: la ilusión de que quizás esto podría convertirse en algo más. Me hacías pensar en ti en cada momento libre. No quería desperdiciar ninguno.</p>
+</article>
+
+<div class="sep">— ✦ —</div>
+
+<!-- CAP 8 -->
+<article class="chapter" id="s8">
+  <div class="ch-meta">
+    <span class="ch-num">Capítulo ocho</span>
+    <span class="ch-line"></span>
+  </div>
+  <h2 class="ch-title">La reunión<br>de los <em>perritos</em></h2>
+  <p>Organizamos juntar a los perros de los dos para ver cómo reaccionaban. Al principio fue un desastre entrañable: se gruñeron como si el mundo entero dependiera de quién cedía primero, y yo observaba eso pensando que quizás había sido mala idea.</p>
+  <p>Pero con el tiempo se fueron rindiendo el uno al otro. Y cuando llegó el momento de despedirse, Luka lloró. Así, sin vergüenza ni filtro, como solo lloran los que sienten demasiado. No pude evitar pensar que me identificaba.</p>
+  <p>Los llevé a todos en mi camioneta de regreso. Iban juntos en la parte de atrás, sacando la cabeza por la ventana, tan cómodos y tan ajenos a todo. Yo los miraba. Y de reojo, te miraba a ti disfrutando cada segundo de ese momento.</p>
+  <div class="quote"><p>"No sé bien qué vi exactamente. Solo sé que me quedé con esa imagen mucho tiempo."</p></div>
+</article>
+
+<div class="sep">— ✦ —</div>
+
+<!-- CAP 9 -->
+<article class="chapter" id="s9">
+  <div class="ch-meta">
+    <span class="ch-num">Capítulo nueve</span>
+    <span class="ch-line"></span>
+  </div>
+  <h2 class="ch-title">Mario Bros<br>y los <em>conejitos</em></h2>
+  <p>Antes del paseo de perros fuimos al cine a ver Mario Bros. Llevaba meses esperando esa película, y cuando te pregunté si querías ir conmigo y dijiste que sí, me levanté de la silla. Literalmente. De la emoción y todo.</p>
+  <p>Para ese día me probé como tres o cuatro conjuntos de ropa distintos. Quería verme lo mejor posible frente a ti, con una concentración que probablemente merecía otro contexto. Pero era contigo, y eso cambiaba todo.</p>
+  <p>Con el tiempo la confianza entre nosotros fue creciendo, con esa naturalidad que tienen las cosas cuando no tienes que forzarlas. Llegamos a nombrarnos "conejitos" entre risas y bromas que solo tenían sentido para nosotros dos. Y en esa complicidad, en ese espacio que era solo nuestro, me di cuenta de lo mucho que me gustaba estar ahí.</p>
+</article>
+
+<div class="sep">— ✦ —</div>
+
+<!-- CAP 10 -->
+<article class="chapter" id="s10">
+  <div class="ch-meta">
+    <span class="ch-num">Capítulo diez</span>
+    <span class="ch-line"></span>
+  </div>
+  <h2 class="ch-title">La idea de<br>un <em>futuro</em></h2>
+  <p>En alguna conversación, sin que ninguno lo planeara, surgió la idea de casarnos a los 28 años. Creo que empezó como una broma. O quizás no. A veces las cosas más reales llegan disfrazadas de broma para ver si las dejas pasar.</p>
+  <p>Yo no la dejé pasar.</p>
+  <p>Me quedé pensando en eso después, solo, y descubrí que imaginar una vida junto a ti no me parecía imposible. Me parecía exactamente lo contrario. Cada vez que imagino algo, cualquier cosa, y pienso en qué dirías tú, termino sonriendo sin haberlo planeado.</p>
+  <div class="quote"><p>"Pensar en ti siempre termina bien. Sin importar qué imagine, la respuesta al final es la misma: feliz."</p></div>
+</article>
+
+<div class="sep">— ✦ —</div>
+
+<!-- CAP 11 -->
+<article class="chapter" id="s11">
+  <div class="ch-meta">
+    <span class="ch-num">Capítulo once</span>
+    <span class="ch-line"></span>
+  </div>
+  <h2 class="ch-title">La <em>feria</em></h2>
+  <p>No pensaba ir a la feria. En serio, no era parte del plan.</p>
+  <p>Pero cuando supe que ibas a estar ahí, hice todo lo posible para llegar. Convencí a mi mamá, convencí a mi hermana, las estuve apurando desde temprano para poder salir antes. Y llegué.</p>
+  <p>Estabas con un vestido que me pareció precioso. Te llevé un sombrero de feria, de esos que uno compra sin pensarlo demasiado, y aunque al principio no querías ponértelo, te convencí. Esas pequeñas victorias también cuentan.</p>
+  <p>Cuando llegó el momento de irnos, apareció la posibilidad de quedarme más tiempo contigo. No lo dudé. Me quedé. Conocí a tu abuelita, de quien me has hablado, y fue una noche que terminó siendo mucho más de lo que esperaba. Como casi todo lo que pasa cuando estoy contigo.</p>
+</article>
+
+<!-- CIERRE -->
+<section class="ending">
+  <div class="ending-bg"></div>
+  <div class="chapter" style="position:relative; text-align:center; padding: 0; opacity:1; transform:none;">
+    <div class="ending-glyph">❧</div>
+    <p class="ending-quote">"Y aunque no sé qué pase después,<br>me alegra que la historia haya<br>comenzado contigo, Alejandra."</p>
+    <p class="ending-sig">— Daniel</p>
+  </div>
+</section>
+
+<script>
+  const chapters = document.querySelectorAll('.chapter');
+  const prog = document.getElementById('prog');
+  const navLinks = document.querySelectorAll('.sidenav a');
+  const sections = document.querySelectorAll('[id^="s"]');
+
+  // Fade in on scroll
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.12 });
+  chapters.forEach(c => obs.observe(c));
+
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+    prog.style.width = pct + '%';
+
+    // Active nav dot
+    let current = 0;
+    sections.forEach((s, i) => {
+      if (window.scrollY >= s.offsetTop - 300) current = i;
+    });
+    navLinks.forEach((l, i) => l.classList.toggle('active', i === current));
+  });
+
+  // Smooth scroll nav
+  navLinks.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(link.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
